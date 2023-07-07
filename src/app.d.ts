@@ -7,7 +7,6 @@ declare global {
 		// interface PageData {}
 		// interface Platform {}
 	}
-
 	type Selected = {
 		type: 'title' | 'header' | 'group' | 'item' | 'footer';
 		gidx?: number;

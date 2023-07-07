@@ -1,6 +1,5 @@
-import crypto from 'crypto';
-
-import jwt, { type JwtPayload } from 'jsonwebtoken';
+import crypto from 'crypto-browserify';
+import * as jose from 'jose';
 // atoken
 
 // rtoken
@@ -26,8 +25,7 @@ import jwt, { type JwtPayload } from 'jsonwebtoken';
  */
 
 const jwtSecret = crypto.randomBytes(24);
-
-export const signToken = ({
+export const signToken = async ({
 	sub,
 	uid,
 	mids
@@ -35,21 +33,16 @@ export const signToken = ({
 	sub: 'a' | 'r';
 	uid?: string;
 	mids?: string[];
-}): string => {
-	return jwt.sign(
-		{
-			sub,
-			uid,
-			mids
-		},
-		jwtSecret,
-		{ expiresIn: sub === 'a' ? '1d' : '3d' }
-	);
+}): Promise<string> => {
+	return await new jose.SignJWT({ uid, mids })
+		.setSubject(sub)
+		.setIssuedAt()
+		.setExpirationTime(sub === 'a' ? '1d' : '3d')
+		.sign(jwtSecret);
 };
 
-export const verifyToken = (
+export const verifyToken = async (
 	token: string
-): string | (JwtPayload & { mids?: string[]; uid?: string }) | void => {
-	const decodedToken = jwt.verify(token, jwtSecret);
-	return decodedToken;
+): Promise<jose.JWTPayload & { mids?: string[]; uid?: string }> => {
+	return (await jose.jwtVerify(token, jwtSecret)).payload;
 };

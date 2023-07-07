@@ -1,5 +1,5 @@
 <script lang="ts">
-	import jwt_decode from 'jwt-decode';
+	import { decodeJwt } from 'jose';
 	import { fade, slide } from 'svelte/transition';
 	import { flip } from 'svelte/animate';
 	import { goto } from '$app/navigation';
@@ -34,7 +34,7 @@
 		const atoken = window.sessionStorage.getItem('atoken');
 		const rtoken = window.sessionStorage.getItem('rtoken');
 		if (atoken || rtoken) {
-			const payload = jwt_decode(atoken || rtoken);
+			const payload = decodeJwt(atoken || rtoken);
 			isSiginedIn = true;
 			mids = payload.mids;
 		}

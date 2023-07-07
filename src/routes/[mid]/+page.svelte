@@ -9,7 +9,7 @@
 	import { onMount } from 'svelte';
 	import { error } from '@sveltejs/kit';
 	import { page } from '$app/stores';
-	import jwt_decode from 'jwt-decode';
+	import { decodeJwt } from 'jose';
 	import { goto } from '$app/navigation';
 	import QR from '$lib/QR.svelte';
 
@@ -85,7 +85,7 @@
 		}
 
 		const atoken = window.sessionStorage.getItem('atoken');
-		if (atoken && jwt_decode(atoken).mids.includes($page.params.mid)) {
+		if (atoken && decodeJwt(atoken).mids.includes($page.params.mid)) {
 			isOwner = true;
 		} else {
 			isOwner = false;

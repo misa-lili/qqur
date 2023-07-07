@@ -7,8 +7,8 @@ import {
 } from '$env/static/private';
 import { json } from '@sveltejs/kit';
 import bcrypt from 'bcryptjs';
-import crypto from 'crypto';
-import { signToken } from '$lib/server/jwt.js';
+import crypto from 'crypto-browserify';
+import { signToken } from '$lib/server/jwt';
 
 const namespace_id = users_namespace_id;
 const key = crypto.createHash('sha256').update(private_key).digest();

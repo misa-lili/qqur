@@ -1,9 +1,6 @@
 import { workers_token, account_id, menus_namespace_id } from '$env/static/private';
-import { signToken, verifyToken } from '$lib/server/jwt.js';
+import { signToken, verifyToken } from '$lib/server/jwt';
 import { json } from '@sveltejs/kit';
-import type { JwtPayload } from 'jsonwebtoken';
-
-import { DynamoDBClient, GetItemCommand, PutItemCommand } from '@aws-sdk/client-dynamodb';
 
 const namespace_id = menus_namespace_id;
 
@@ -16,29 +13,19 @@ export async function GET({ url }) {
 
 	// Get menu
 	if (key) {
-		// const body = await fetch(
-		// 	`https://api.cloudflare.com/client/v4/accounts/${account_id}/storage/kv/namespaces/${namespace_id}/values/${key}`,
-		// 	{
-		// 		method: 'GET',
-		// 		headers: {
-		// 			'Content-Type': 'application/json',
-		// 			Authorization: `Bearer ${workers_token}`
-		// 		}
-		// 	}
-		// ).then((r) => r.json());
-
-		// https://docs.aws.amazon.com/sdk-for-javascript/v3/developer-guide/dynamodb-example-table-read-write.html
-		const client = new DynamoDBClient({ region: 'ap-northeast-2' });
-		const command = new GetItemCommand({
-			TableName: 'menu',
-			Key: {
-				key: { S: key }
+		const body = await fetch(
+			`https://api.cloudflare.com/client/v4/accounts/${account_id}/storage/kv/namespaces/${namespace_id}/values/${key}`,
+			{
+				method: 'GET',
+				headers: {
+					'Content-Type': 'application/json',
+					Authorization: `Bearer ${workers_token}`
+				}
 			}
-		});
-		const response = await client.send(command);
+		).then((r) => r.json());
 
 		try {
-			return json({ ok: true, status: 200, body: JSON.parse(response.Item?.value.S || '{}') });
+			return json({ ok: true, status: 200, body });
 		} catch (error: any) {
 			return json({ ok: false, status: 404, message: error.message });
 		}
@@ -74,36 +61,18 @@ export async function PUT({ url, request }) {
 	}
 
 	// PUT menu
-	// await fetch(
-	// 	`https://api.cloudflare.com/client/v4/accounts/${account_id}/storage/kv/namespaces/${namespace_id}/values/${key}`,
-	// 	{
-	// 		method: 'PUT',
-	// 		headers: {
-	// 			// 'Content-Type': 'multipart/form-data; boundary=---011000010111000001101001',
-	// 			'Content-Type': 'application/json',
-	// 			Authorization: `Bearer ${workers_token}`
-	// 		},
-	// 		body
-	// 	}
-	// );
-
-	const client = new DynamoDBClient({ region: 'ap-northeast-2' });
-	const command = new PutItemCommand({
-		TableName: 'menu',
-		Item: {
-			key: { S: key! },
-			value: { S: body! }
+	await fetch(
+		`https://api.cloudflare.com/client/v4/accounts/${account_id}/storage/kv/namespaces/${namespace_id}/values/${key}`,
+		{
+			method: 'PUT',
+			headers: {
+				// 'Content-Type': 'multipart/form-data; boundary=---011000010111000001101001',
+				'Content-Type': 'application/json',
+				Authorization: `Bearer ${workers_token}`
+			},
+			body
 		}
-	});
-
-	client
-		.send(command)
-		.then((response) => {
-			console.log('Item inserted successfully:', response);
-		})
-		.catch((error) => {
-			console.error('Error:', error);
-		});
+	);
 
 	return json({ ok: true, status: 200, body: { atoken } });
 }
