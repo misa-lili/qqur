@@ -1,6 +1,6 @@
 <script lang="ts">
 	/** @type {import('./$types').PageData} */
-	export let data: { body: Menu };
+	export let data: Response;
 
 	import IconPlus from 'svelte-material-icons/Plus.svelte';
 	import IconFolderPlusOutline from 'svelte-material-icons/FolderPlusOutline.svelte';
@@ -56,12 +56,12 @@
 		isMounted = true;
 	});
 
-	$: if (isMounted) {
+	$: if (isMounted === true) {
 		initPage();
 	}
 
 	const initPage = async () => {
-		console.log(data.body);
+		console.log('data', data);
 		menu = {
 			...data.body,
 			headers: data.body.headers.map((header) =>
