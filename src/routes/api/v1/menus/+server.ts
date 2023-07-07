@@ -22,7 +22,7 @@ export async function GET({ url }) {
 					Authorization: `Bearer ${workers_token}`
 				}
 			}
-		).then((r) => r.json());
+		).then((response) => response.json());
 
 		try {
 			return json({ ok: true, status: 200, body });

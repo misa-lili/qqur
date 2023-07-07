@@ -54,7 +54,13 @@
 
 	onMount(async () => {
 		isMounted = true;
+	});
 
+	$: if (isMounted) {
+		initPage();
+	}
+
+	const initPage = async () => {
 		console.log(data.body);
 		menu = {
 			...data.body,
@@ -108,7 +114,7 @@
 		}
 
 		await relayout();
-	});
+	};
 
 	const initMasonry = async () => {
 		Masonry = (await import('masonry-layout')).default;
