@@ -5,7 +5,7 @@ import { json } from '@sveltejs/kit';
 const namespace_id = menus_namespace_id;
 
 /** @type {import('./$types').RequestHandler} */
-export async function GET({ url }) {
+export async function GET({ fetch, url }) {
 	/**
 	 * 특정 메뉴를 가져옵니다.
 	 */
