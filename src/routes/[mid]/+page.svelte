@@ -55,6 +55,7 @@
 	onMount(async () => {
 		isMounted = true;
 
+		console.log(data.body);
 		menu = {
 			...data.body,
 			headers: data.body.headers.map((header) =>
