@@ -1,6 +1,6 @@
 <script lang="ts">
 	/** @type {import('./$types').PageData} */
-	export let data: Response;
+	export let data: { body: Menu };
 
 	import IconPlus from 'svelte-material-icons/Plus.svelte';
 	import IconFolderPlusOutline from 'svelte-material-icons/FolderPlusOutline.svelte';
@@ -54,17 +54,15 @@
 
 	onMount(async () => {
 		isMounted = true;
-	});
 
-	$: if (isMounted === true) {
-		initPage();
-	}
-
-	const initPage = async () => {
-		console.log('data', data);
 		menu = {
 			...data.body,
-			title: typeof data.body.title === 'string' ? { value: data.body.title } : data.body.title,
+			title:
+				typeof data.body.title === 'string'
+					? { value: data.body.title }
+					: data.body?.title || {
+							value: ''
+					  },
 			headers: data.body.headers.map((header) =>
 				typeof header === 'string'
 					? { id: crypto.randomUUID(), value: header }
@@ -115,7 +113,7 @@
 		}
 
 		await relayout();
-	};
+	});
 
 	const initMasonry = async () => {
 		Masonry = (await import('masonry-layout')).default;
