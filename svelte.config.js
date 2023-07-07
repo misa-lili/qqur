@@ -16,12 +16,7 @@ const config = {
 				include: ['/*'],
 				exclude: ['<all>']
 			}
-		}),
-		vite: {
-			define: {
-				global: {}
-			}
-		}
+		})
 	}
 };
 
