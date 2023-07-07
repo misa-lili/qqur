@@ -57,7 +57,12 @@
 
 		menu = {
 			...data.body,
-			title: typeof data.body.title === 'string' ? { value: data.body.title } : data.body.title,
+			title:
+				typeof data.body.title === 'string'
+					? { value: data.body.title }
+					: data.body?.title || {
+							value: ''
+					  },
 			headers: data.body.headers.map((header) =>
 				typeof header === 'string'
 					? { id: crypto.randomUUID(), value: header }
