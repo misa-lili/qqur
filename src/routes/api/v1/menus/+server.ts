@@ -23,7 +23,12 @@ export async function GET({ fetch, url }) {
 					Authorization: `Bearer ${workers_token}`
 				}
 			}
-		).then((response) => response.json());
+		)
+			.then((response) => response.json())
+			.catch((error) => {
+				console.error(error);
+				return json({ ok: false, status: 500, message: error.message });
+			});
 
 		try {
 			return json({ ok: true, status: 200, body });

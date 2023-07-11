@@ -4,6 +4,6 @@ export async function load({ fetch, params }) {
 		.then((response) => response.json())
 		.catch((err) => {
 			console.error(err);
-			throw new err();
+			throw new Error(err);
 		});
 }
