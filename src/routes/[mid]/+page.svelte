@@ -54,6 +54,7 @@
 
 	onMount(async () => {
 		isMounted = true;
+		if (!data?.body) return;
 
 		menu = {
 			...data.body,
