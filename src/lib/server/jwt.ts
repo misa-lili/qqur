@@ -1,5 +1,4 @@
 import * as jose from 'jose';
-// import crypto from 'crypto-browserify';
 // atoken
 
 // rtoken
@@ -25,7 +24,7 @@ import * as jose from 'jose';
  */
 
 const array = new Uint8Array(24);
-const jwtSecret = crypto.getRandomValues(array); // crypto.randomBytes(24);
+const jwtSecret = crypto.getRandomValues(array);
 export const signToken = async ({
 	sub,
 	uid,

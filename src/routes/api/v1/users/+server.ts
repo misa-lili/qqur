@@ -1,29 +1,28 @@
-import {
-	workers_token,
-	account_id,
-	users_namespace_id,
-	private_key,
-	algorithm
-} from '$env/static/private';
+import { workers_token, account_id, users_namespace_id, private_key } from '$env/static/private';
 import { json } from '@sveltejs/kit';
 import bcrypt from 'bcryptjs';
-import crypto from 'crypto-browserify';
 import { signToken } from '$lib/server/jwt';
 
 const namespace_id = users_namespace_id;
-const key = crypto.createHash('sha256').update(private_key).digest();
+const key = await getSha256Digest(private_key);
+
+async function getSha256Digest(privateKey: string) {
+	const encoder = new TextEncoder(); // Used to convert string to Uint8Array
+	const data = encoder.encode(privateKey);
+	const digest = await crypto.subtle.digest('SHA-256', data);
+	return Buffer.from(digest).toString('hex');
+}
 
 /** @type {import('./$types').RequestHandler} */
 export async function GET({ url }) {
 	const email = url.searchParams.get('key');
 	if (email === null) return json({ ok: false, status: 500 });
-	const encryptedEmail = unsecureEncrypt(email);
 	const pw = url.searchParams.get('pw');
 
 	if (email && pw) {
 		// Login
 		const result = await fetch(
-			`https://api.cloudflare.com/client/v4/accounts/${account_id}/storage/kv/namespaces/${namespace_id}/values/${encryptedEmail}`,
+			`https://api.cloudflare.com/client/v4/accounts/${account_id}/storage/kv/namespaces/${namespace_id}/values/${email}`,
 			{
 				method: 'GET',
 				headers: {
@@ -40,8 +39,8 @@ export async function GET({ url }) {
 		const compare = await bcrypt.compare(pw, result.password);
 
 		if (compare) {
-			const atoken = signToken({ sub: 'a', uid: encryptedEmail, mids: result.mids });
-			const rtoken = signToken({ sub: 'r', uid: encryptedEmail, mids: result.mids });
+			const atoken = signToken({ sub: 'a', uid: email, mids: result.mids });
+			const rtoken = signToken({ sub: 'r', uid: email, mids: result.mids });
 			return json({ ok: true, status: 200, body: { mids: result.mids, atoken, rtoken } });
 		} else {
 			return json({ ok: false, status: 401 });
@@ -49,7 +48,7 @@ export async function GET({ url }) {
 	} else if (email && !pw) {
 		// check email is exists
 		const body = await fetch(
-			`https://api.cloudflare.com/client/v4/accounts/${account_id}/storage/kv/namespaces/${namespace_id}/values/${encryptedEmail}`,
+			`https://api.cloudflare.com/client/v4/accounts/${account_id}/storage/kv/namespaces/${namespace_id}/values/${email}`,
 			{
 				method: 'GET',
 				headers: {
@@ -77,14 +76,11 @@ export async function PUT({ url, request }) {
 	if (email === null) return json({ ok: false, status: 500 });
 	const body = await request.json();
 
-	// email 양방향 암호화
-	const encryptedEmail = unsecureEncrypt(email);
-
 	// password 단방향 암호화
 	const hashedPassword = await bcrypt.hash(body.password, await bcrypt.genSalt(10));
 
 	await fetch(
-		`https://api.cloudflare.com/client/v4/accounts/${account_id}/storage/kv/namespaces/${namespace_id}/values/${encryptedEmail}`,
+		`https://api.cloudflare.com/client/v4/accounts/${account_id}/storage/kv/namespaces/${namespace_id}/values/${email}`,
 		{
 			method: 'PUT',
 			headers: {
@@ -99,22 +95,8 @@ export async function PUT({ url, request }) {
 	);
 
 	// JWT
-	const atoken = signToken({ sub: 'a', uid: encryptedEmail, mids: body.mids });
-	const rtoken = signToken({ sub: 'r', uid: encryptedEmail, mids: body.mids });
+	const atoken = signToken({ sub: 'a', uid: email, mids: body.mids });
+	const rtoken = signToken({ sub: 'r', uid: email, mids: body.mids });
 
 	return json({ ok: true, status: 200, body: { atoken, rtoken } });
-}
-
-function unsecureEncrypt(text: string): string {
-	const cipher = crypto.createCipheriv(algorithm, key, null);
-	let encrypted = cipher.update(text, 'utf8', 'hex');
-	encrypted += cipher.final('hex');
-	return encrypted;
-}
-
-function unsecureDecrypt(encryptedText: string): string {
-	const decipher = crypto.createDecipheriv(algorithm, key, null);
-	let decrypted = decipher.update(encryptedText, 'hex', 'utf8');
-	decrypted += decipher.final('utf8');
-	return decrypted;
 }
