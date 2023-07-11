@@ -45,7 +45,6 @@
 		"openpgp": "^5.8.0",
 		"qrcode": "^1.5.3",
 		"stream": "^0.0.2",
-		"stream-browserify": "^3.0.0",
 		"svelte-material-icons": "^3.0.4"
 	}
 }

@@ -1,64 +1,63 @@
-
 body {
-  @apply text-[rgb(205,156,112)] text-opacity-80 bg-gradient-to-r to-[rgb(37,45,36)] from-[rgb(47,55,46)] ;
-  /* @apply text-[rgb(185,136,92)] text-opacity-90 bg-gradient-to-r from-teal-800 to-teal-900; */
+	@apply text-[rgb(205,156,112)] text-opacity-80 bg-gradient-to-r to-[rgb(37,45,36)] from-[rgb(47,55,46)];
+	/* @apply text-[rgb(185,136,92)] text-opacity-90 bg-gradient-to-r from-teal-800 to-teal-900; */
 }
 
 ._template {
-  @apply container mx-auto flex flex-col w-full space-y-4 p-6 sm:p-8 md:p-12 sm:space-y-12;
+	@apply container mx-auto flex flex-col w-full space-y-4 p-6 sm:p-8 md:p-12 sm:space-y-12;
 }
 
 div:focus {
-  @apply outline-none;
+	@apply outline-none;
 }
 
 ._title {
-  @apply font-black outline-none text-8xl leading-[4.8rem] overflow-visible caret-slate-500;
+	@apply font-black outline-none text-8xl leading-[4.8rem] overflow-visible caret-slate-500;
 }
 
 [placeholder]:empty::before {
-  content: attr(placeholder);
-  color: #bbb;
+	content: attr(placeholder);
+	color: #bbb;
 }
 
 [placeholder]:empty:focus::before {
-  content: '';
+	content: '';
 }
 
 ._header {
-  @apply text-lg;
+	@apply text-lg;
 }
 
 ._groups {
 }
 
 ._group {
-  @apply space-y-6 mb-12;
+	@apply space-y-6 mb-12;
 }
 
 ._group_name {
-  @apply font-medium text-3xl font-mono;
+	@apply font-medium text-3xl font-mono;
 }
 
 ._item {
-  @apply space-y-1;
+	@apply space-y-1;
 }
 
 ._item_name {
-  @apply basis-auto flex-grow text-xl decoration-slice;
+	@apply basis-auto flex-grow text-xl decoration-slice;
 }
 
 ._item_price {
-  @apply font-extralight;
+	@apply font-extralight;
 }
 
 ._description {
-  @apply font-extralight;
+	@apply font-extralight;
 }
 
 ._footer_container {
 }
 
 ._footer {
-  @apply text-right;
+	@apply text-right;
 }

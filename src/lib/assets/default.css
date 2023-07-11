@@ -34,67 +34,62 @@ div:focus {
 	@apply text-pink-500 hover:text-pink-400;
 }
 
-
 /*
 	Content
 */
-body { 
+body {
 	@apply text-black text-opacity-90 bg-white;
 
-	._template { 
-		@apply 
-			container 
+	._template {
+		@apply container 
 			mx-auto 
 			flex flex-col 
 			space-y-4 sm:space-y-12
 			w-full  
 			px-6 sm:px-8 md:px-24
-			py-12
-		;
+			py-12;
 
 		._wrapper_title {
-			._title { 
+			._title {
 				@apply mb-6 font-black outline-none text-8xl leading-[4.8rem] overflow-visible caret-slate-500;
 			}
 		}
 
 		._wrapper_header {
-			._header { 
+			._header {
 				@apply text-lg;
 			}
 		}
 
-		._btn_header_plus { 
-			@apply 
-				_icon_color_1 
+		._btn_header_plus {
+			@apply _icon_color_1 
 				space-x-1 text-sm items-center 
-				cursor-pointer
-			;
+				cursor-pointer;
 		}
 
 		._groups {
-			._group { 
-				@apply 
-					w-full sm:w-[calc(100%/2-60px)] 
+			._group {
+				@apply w-full sm:w-[calc(100%/2-60px)] 
 					flex flex-col 
 					space-y-6 
-					mb-12
-				;
+					mb-12;
 
-				._group_properties { 
+				._group_properties {
 					@apply flex items-end;
 
-					._group_name { 
-						@apply flex-1 font-medium text-3xl font-mono; }
+					._group_name {
+						@apply flex-1 font-medium text-3xl font-mono;
+					}
 
-					._group_col { 
-						@apply font-mono text-right; }
+					._group_col {
+						@apply font-mono text-right;
+					}
 				}
 
-				._items { 
-					@apply flex flex-col space-y-6 ;
-					._item_wrapper { 
-						@apply flex; 
+				._items {
+					@apply flex flex-col space-y-6;
+					._item_wrapper {
+						@apply flex;
 
 						._item {
 							@apply flex-grow space-y-1;
@@ -114,22 +109,17 @@ body {
 							}
 						}
 					}
-
 				}
 
-				._btn_item_plus { 
-					@apply 
-						_icon_color_2
-						space-x-1 text-sm items-center cursor-pointer 
-					;
+				._btn_item_plus {
+					@apply _icon_color_2
+						space-x-1 text-sm items-center cursor-pointer;
 				}
 			}
 
 			._btn_group_plus {
-				@apply 
-					_icon_color_1
-					space-x-1 text-sm items-center cursor-pointer
-				;
+				@apply _icon_color_1
+					space-x-1 text-sm items-center cursor-pointer;
 			}
 		}
 
@@ -137,7 +127,7 @@ body {
 			@apply flex flex-col;
 
 			._footer_wrapper {
-				@apply flex flex-col; 
+				@apply flex flex-col;
 
 				._footer {
 					@apply text-right;
@@ -158,10 +148,3 @@ body {
 		}
 	}
 }
-
-
-
-
-
-
-
