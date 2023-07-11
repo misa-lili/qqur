@@ -1,6 +1,7 @@
 import { workers_token, account_id, menus_namespace_id } from '$env/static/private';
 import { signToken, verifyToken } from '$lib/server/jwt';
 import { json } from '@sveltejs/kit';
+import type { JWTPayload } from 'jose';
 
 const namespace_id = menus_namespace_id;
 
@@ -36,7 +37,7 @@ export async function PUT({ url, request }) {
 	/**
 	 * 특정 메뉴를 업서트 합니다.
 	 */
-	const key = url.searchParams.get('key');
+	const key = url.searchParams.get('key') || '';
 	const body = JSON.stringify(await request.json());
 
 	const token = request.headers.get('Authorization')?.split(' ')[1] ?? null;
@@ -48,14 +49,14 @@ export async function PUT({ url, request }) {
 		}
 		const isValid = verifyToken(token);
 
-		if ((isValid as JwtPayload).mids.includes(key) === false)
+		if ((isValid as Payload).mids?.includes(key) === false)
 			throw new Error('Forbidden: no permission');
 	} catch (error: any) {
 		return json({ ok: false, status: 403, message: error.message });
 	}
 
 	let atoken = null;
-	const payload: JwtPayload = verifyToken(token) as JwtPayload;
+	const payload: Payload = verifyToken(token) as Payload;
 	if (payload.sub === 'r') {
 		atoken = signToken({ sub: 'a', uid: payload.uid, mids: payload.mids });
 	}

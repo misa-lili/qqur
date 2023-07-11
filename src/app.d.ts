@@ -46,6 +46,12 @@ declare global {
 		password: string;
 		mids: [mid: string];
 	};
+
+	interface Payload extends import('jose').JWTPayload {
+		mids?: string[];
+		uid?: string;
+		sub?: 'a' | 'r';
+	}
 }
 
 export {};
