@@ -9,13 +9,13 @@
 	import { onMount } from 'svelte';
 	import { error } from '@sveltejs/kit';
 	import { page } from '$app/stores';
-	import { decodeJwt } from 'jose';
+	// import { decodeJwt } from 'jose'; // TODO: 복구
 	import { goto } from '$app/navigation';
-	import QR from '$lib/QR.svelte';
+	// import QR from '$lib/QR.svelte';
 
 	import { flip } from 'svelte/animate';
 	import { fade } from 'svelte/transition';
-	import Toolbar from '$lib/Toolbar.svelte';
+	// import Toolbar from '$lib/Toolbar.svelte';
 
 	import '$lib/assets/default.css';
 
@@ -91,11 +91,11 @@
 			insertImage();
 		}
 		const atoken = window.sessionStorage.getItem('atoken');
-		if (atoken && decodeJwt(atoken).mids.includes($page.params.mid)) {
-			isOwner = true;
-		} else {
-			isOwner = false;
-		}
+		// if (atoken && decodeJwt(atoken).mids.includes($page.params.mid)) {
+		// 	isOwner = true;
+		// } else {
+		// 	isOwner = false;
+		// } // TODO: 복구
 		if (menu.options?.styleSheet) {
 			// console.log(menu.options.styleSheet);
 			// document.head.innerHTML += menu.options.styleSheet;
@@ -276,9 +276,9 @@
 	<title>{$page.params.mid || menu.title || 'qqur.app'}</title>
 </svelte:head>
 
-{#if isOwner}
+<!-- {#if isOwner}
 	<Toolbar bind:menu bind:selected on:relayout={relayout} on:save={save} on:signOut={signOut} />
-{/if}
+{/if} -->
 
 <dialog class="bg-white/50 fixed z-50 top-0 w-full h-full" open={isExpired}>
 	<div class="bg-white border rounded-3xl flex flex-col space-y-6 px-3 pt-3 pb-12">
@@ -544,7 +544,7 @@
 			<IconPlus class="_icon" />
 		</div>
 		<div class="_qr">
-			<QR url={`https://qqur.app/${$page.params.mid}`} />
+			<!-- <QR url={`https://qqur.app/${$page.params.mid}`} /> -->
 		</div>
 		<div class="_qqur" on:click={() => goto('/')}>
 			<IconLightningBolt class="_icon" /> <span>BY 뀨알</span>
