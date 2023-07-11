@@ -14,7 +14,7 @@ export async function GET({ fetch, url }) {
 
 	// Get menu
 	if (key) {
-		const body = await fetch(
+		const response = await fetch(
 			`https://api.cloudflare.com/client/v4/accounts/${account_id}/storage/kv/namespaces/${namespace_id}/values/${key}`,
 			{
 				method: 'GET',
@@ -23,18 +23,14 @@ export async function GET({ fetch, url }) {
 					Authorization: `Bearer ${workers_token}`
 				}
 			}
-		)
-			.then((response) => response.json())
-			.catch((error) => {
-				console.error(error);
-				return json({ ok: false, status: 500, message: error.message });
-			});
+		);
+		const data = await response.json();
 
-		try {
-			return json({ ok: true, status: 200, body });
-		} catch (error: any) {
-			return json({ ok: false, status: 404, message: error.message });
+		if (data.success === false) {
+			return json({ ok: false, status: 404, message: data.errors[0].message });
 		}
+
+		return json({ ok: true, status: 200, body: data });
 	}
 }
 
